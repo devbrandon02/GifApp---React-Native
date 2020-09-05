@@ -22,12 +22,18 @@ export const BarSearch = () => {
   }
 
   const handleSearch = () => {
-    console.log(textSearch)
-    dispatch({
-      type: 'search',
-      payload: textSearch
-    })
-  }
+    if(textSearch === ''){
+      dispatch({
+        type: 'resetTrending'
+      })
+    } else{
+        dispatch({
+          type: 'search',
+          payload: textSearch,
+          typeSearch: 'search'
+        })
+      }
+    }
 
    
   return (
@@ -41,7 +47,7 @@ export const BarSearch = () => {
           style={ style.input }
           autoCompleteType="off"
           blurOnSubmit
-          placeholder="Naruto"
+          placeholder="Trending"
           onChangeText={ handleChangeSearch }
           onSubmitEditing={ handleSearch }
           value={ textSearch }
@@ -68,14 +74,15 @@ const style = StyleSheet.create({
   },
   viewContainer:{
     justifyContent: 'center',
-    height: 200,
+    height: 150,
   },
   title:{
     textAlign: 'center',
     color: '#eee',
     paddingBottom: 30,
     color: '#9426f7',
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
+    marginTop: 20
   }
 })

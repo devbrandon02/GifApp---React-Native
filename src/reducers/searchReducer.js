@@ -6,7 +6,13 @@ export const searchReducer = (state={}, action) => {
   switch (action.type) {
     case 'search':
       return{
-        search: action.payload
+        search: action.payload,
+        typeSearch: action.typeSearch
+      }
+      
+    case 'resetTrending':
+      return{
+        typeSearch: 'trending'
       }
 
     default:

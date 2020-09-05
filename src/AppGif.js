@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 
-import React, { useReducer, useEffect, useContext } from 'react';
+import React, { useReducer, useEffect, useContext, useState } from 'react';
 
 import {
   SafeAreaView,
@@ -9,27 +9,91 @@ import {
   ScrollView,
   Text,
   StatusBar,
+  FlatList,
+  View,
+  ActivityIndicator,
 } from 'react-native';
 import { BarSearch } from './components/BarSearch';
 import { searchReducer } from './reducers/searchReducer';
 import { SearchContext } from './context/searchContext';
+import { GifsCard } from './components/GifsCard';
 
+const API = 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh'
 
 
 export const AppGif = () =>{
   const { search } = useContext(SearchContext)
+  const [gifData, setgifData] = useState()
 
-  console.log(search)
+  console.log(search.search)
+
+  useEffect(() => {
+   if(search.typeSearch === 'search'){
+    fetch(`https://api.giphy.com/v1/gifs/search?q=${search.search}&api_key=${API}`,{
+        method: 'GET',
+        headers:{
+          api_key: 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh',
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(res => res.json())
+      .then(({data}) => {
+        console.log(data)
+        setgifData(data)
+      })
+      .catch((err) => console.log(err))
+   } 
+  }, [search])
+
+
+  useEffect(() => {
+    if(search.typeSearch === 'trending'){
+      fetch('https://api.giphy.com/v1/gifs/trending',{
+        method: 'GET',
+        headers:{
+          api_key: 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh',
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(res => res.json())
+      .then(({ data }) => {
+        setgifData(data)
+      })
+      .catch((err) => console.log(err))
+    }
+  },[search.typeSearch])
   
+
   return (
     <>
       <StatusBar barStyle="light-content" />
       <SafeAreaView style={ styles.content }>
         <BarSearch/>
 
-        <ScrollView>
-          <Text>{ search.search }</Text>
-        </ScrollView>
+        { !gifData 
+          ? <View style={ styles.loadingView}>
+                <ActivityIndicator
+                  size="large"
+                  color="#9426f7"
+                  animating
+                />
+            </View>
+          
+
+          : <FlatList
+              initialNumToRender="20"
+              progressViewOffset
+              removeClippedSubviews
+              data={ gifData }
+              keyExtractor={(item) => (item.id)}
+              renderItem={({item}) =>(
+                <GifsCard
+                  gifData={ item } 
+                  search={ search }
+                />
+              )}
+            />
+        }
       </SafeAreaView>
     </>
   );
@@ -39,6 +103,11 @@ const styles = StyleSheet.create({
   content:{
     backgroundColor: '#303030',
     height: '100%'
-  }
+  },
+  loadingView:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '55%'
+  },
 })
 

@@ -6,7 +6,10 @@ import { searchReducer } from './src/reducers/searchReducer'
 import { SearchContext } from './src/context/searchContext'
 
 export const App: () => React$Node = () => {
-  const [search, dispatch] = useReducer(searchReducer, {search: 'naruto'})
+  const [search, dispatch] = useReducer(searchReducer, {
+    search: 'naruto',
+    typeSearch: 'trending'
+  })
 
   return (
       <SearchContext.Provider value={{search, dispatch}}>
