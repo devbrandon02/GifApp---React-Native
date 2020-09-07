@@ -7,8 +7,9 @@ import { SearchContext } from './src/context/searchContext'
 
 export const App: () => React$Node = () => {
   const [search, dispatch] = useReducer(searchReducer, {
-    search: 'naruto',
-    typeSearch: 'trending'
+    search: '',
+    typeSearch: 'trending',
+    category: 'gifs'
   })
 
   return (

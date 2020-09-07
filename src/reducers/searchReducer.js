@@ -7,12 +7,21 @@ export const searchReducer = (state={}, action) => {
     case 'search':
       return{
         search: action.payload,
-        typeSearch: action.typeSearch
+        typeSearch: action.typeSearch,
+        category: action.category
+      }
+
+    case 'stickers':
+      return{
+        search: action.payload,
+        category: action.category,
+        typeSearch: action.typeSearch,
       }
       
     case 'resetTrending':
       return{
-        typeSearch: 'trending'
+        typeSearch: 'trending',
+        category: action.category
       }
 
     default:

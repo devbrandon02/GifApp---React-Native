@@ -22,14 +22,16 @@ const API = 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh'
 
 
 export const AppGif = () =>{
-  const { search } = useContext(SearchContext)
+  const { search: searchText } = useContext(SearchContext)
   const [gifData, setgifData] = useState()
 
-  console.log(search.search)
+  const {category, typeSearch, search} = searchText
+
+  console.log(category, typeSearch, search)
 
   useEffect(() => {
-   if(search.typeSearch === 'search'){
-    fetch(`https://api.giphy.com/v1/gifs/search?q=${search.search}&api_key=${API}`,{
+   if(typeSearch === 'search'){
+    fetch(`https://api.giphy.com/v1/${category}/search?q=${search}&api_key=${API}`,{
         method: 'GET',
         headers:{
           api_key: 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh',
@@ -43,12 +45,13 @@ export const AppGif = () =>{
       })
       .catch((err) => console.log(err))
    } 
-  }, [search])
+  }, [searchText])
 
 
   useEffect(() => {
-    if(search.typeSearch === 'trending'){
-      fetch('https://api.giphy.com/v1/gifs/trending',{
+    if(typeSearch === 'trending'){
+
+      fetch(`https://api.giphy.com/v1/${category}/${typeSearch}`,{
         method: 'GET',
         headers:{
           api_key: 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh',
@@ -61,8 +64,9 @@ export const AppGif = () =>{
       })
       .catch((err) => console.log(err))
     }
-  },[search.typeSearch])
+  },[searchText])
   
+  console.log(gifData)
 
   return (
     <>
