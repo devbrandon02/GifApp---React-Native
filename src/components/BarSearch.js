@@ -47,7 +47,7 @@ export const BarSearch = () => {
       dispatch({
         type: 'stickers',
         payload: textSearch,
-        typeSearch: 'search',
+        typeSearch: search.typeSearch,
         category: 'gifs'
       })
       
@@ -125,7 +125,8 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     height: 200,
     borderBottomColor: '#eee',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    marginBottom: 10
   },
   title:{
     textAlign: 'center',

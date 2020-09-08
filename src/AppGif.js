@@ -27,7 +27,6 @@ export const AppGif = () =>{
 
   const {category, typeSearch, search} = searchText
 
-  console.log(category, typeSearch, search)
 
   useEffect(() => {
    if(typeSearch === 'search'){
@@ -45,7 +44,7 @@ export const AppGif = () =>{
       })
       .catch((err) => console.log(err))
    } 
-  }, [searchText])
+  }, [category, search])
 
 
   useEffect(() => {
@@ -66,7 +65,8 @@ export const AppGif = () =>{
     }
   },[searchText])
   
-  console.log(gifData)
+  console.log(searchText)
+
 
   return (
     <>
