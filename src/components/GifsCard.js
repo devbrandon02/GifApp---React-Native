@@ -1,31 +1,42 @@
 /* eslint-disable */
 
-import React, { useContext } from 'react'
-import { Text, View, StyleSheet, Image, TouchableHighlight, PermissionsAndroid} from 'react-native'
+import React, { useContext, useState } from 'react'
+import { Text, View, StyleSheet, Image, TouchableOpacity, PermissionsAndroid, Modal, Alert} from 'react-native'
 import { SearchContext } from '../context/searchContext'
-
+import { saveGifs } from '../helpers/saveGifs'
 
 
 export const GifsCard = ({search, gifData}) => {
   
+  const [showModal, setshowModal] = useState(true)
+  const [MessageSuccess, setMessageSuccess] = useState(false)
   const { search: searchContext } = useContext(SearchContext)
 
   const { category } = searchContext
 
-  const requestCameraPermission = async () => {
+
+  const saveGifsAndStckers = async (dataUrl, slug) => {
     const permisionResponse = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE) 
 
     if(permisionResponse === PermissionsAndroid.RESULTS.GRANTED && category === 'gifs' ){
-    
+      saveGifs(dataUrl, slug)
+        .then((res) => {
+          setMessageSuccess(true)
+          Alert.alert('Tu Gifs Se ah descargado correctamente :)')
+        })
+        .catch((err)=> {
+          Alert.alert('Ah ocurrido un error con tu descarga :(')
+        })
+
     } else{
       console.log('NO LO PUEDES USAR')
     }
   } 
 
-
   return (
     <>
+      <View>
         <Text style={ styles.titleStyle }>{ gifData.title }</Text>
         <View style={ styles.content }>
           <View style={styles.cardGif}>
@@ -35,15 +46,20 @@ export const GifsCard = ({search, gifData}) => {
                 uri: gifData.images.fixed_height.url
               }}
             />
-            <TouchableHighlight
-              onPress={ requestCameraPermission } 
+            <TouchableOpacity
+              onPress={() => 
+                saveGifsAndStckers(gifData.images.downsized_medium.url, gifData.slug)
+              } 
               style={ styles.btnDownloaded }>
               <Text style={ styles.textBtn }>
                 ¡Descarga este { category }!
               </Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
+
           </View>
         </View>
+      </View>
+
     </>
   )   
 }
@@ -82,6 +98,11 @@ const styles = StyleSheet.create({
     color: '#eee',
     fontSize: 20,
     fontWeight: 'bold'
+  },
+  modalMessage:{
+    height: '50%',
+    width: '50%',
+    backgroundColor: '#eee'
   }
 
 })

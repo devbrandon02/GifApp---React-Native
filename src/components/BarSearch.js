@@ -73,7 +73,6 @@ export const BarSearch = () => {
 
         <TextInput
           style={ style.input }
-          autoCompleteType="off"
           blurOnSubmit
           placeholder="Trending"
           onChangeText={ handleChangeSearch }

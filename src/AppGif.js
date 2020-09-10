@@ -33,7 +33,6 @@ export const AppGif = () =>{
     fetch(`https://api.giphy.com/v1/${category}/search?q=${search}&api_key=${API}`,{
         method: 'GET',
         headers:{
-          api_key: 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh',
           'Content-Type': 'application/json',
         }
       })
@@ -66,6 +65,7 @@ export const AppGif = () =>{
   },[searchText])
   
   console.log(searchText)
+  console.log(gifData)
 
 
   return (
