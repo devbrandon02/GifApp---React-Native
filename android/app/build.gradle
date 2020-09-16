@@ -186,6 +186,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation 'com.facebook.fresco:fresco:2.3.0'
+    implementation 'com.google.android.gms:play-services-ads:19.3.0'
 
     // For animated GIF support
     implementation 'com.facebook.fresco:animated-gif:2.3.0'

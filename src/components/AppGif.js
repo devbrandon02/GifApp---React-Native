@@ -13,12 +13,13 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import { BarSearch } from './components/BarSearch';
-import { searchReducer } from './reducers/searchReducer';
-import { SearchContext } from './context/searchContext';
-import { GifsCard } from './components/GifsCard';
+import { AdMobBanner } from 'react-native-admob'
+import { BarSearch } from './BarSearch';
+import { searchReducer } from '../reducers/searchReducer';
+import { SearchContext } from '../context/searchContext';
+import { GifsCard } from './GifsCard';
 
-const API = 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh'
+const API = 'dwQacYa21OI16ljYleVkrKyTQ43HIhiY'
 
 
 export const AppGif = () =>{
@@ -29,6 +30,8 @@ export const AppGif = () =>{
 
 
   useEffect(() => {
+    setgifData()
+
    if(typeSearch === 'search'){
     fetch(`https://api.giphy.com/v1/${category}/search?q=${search}&api_key=${API}`,{
         method: 'GET',
@@ -47,12 +50,13 @@ export const AppGif = () =>{
 
 
   useEffect(() => {
+    setgifData()
+    
     if(typeSearch === 'trending'){
-
       fetch(`https://api.giphy.com/v1/${category}/${typeSearch}`,{
         method: 'GET',
         headers:{
-          api_key: 'k2boTIiM2GQe51axI4ZrWzgYG3jHdHvh',
+          api_key: API,
           'Content-Type': 'application/json',
         }
       })
@@ -70,6 +74,12 @@ export const AppGif = () =>{
 
   return (
     <>
+      <AdMobBanner
+        adSize="fullBanner"
+        adUnitID="ca-app-pub-7987300867740926/5722986468"
+        testDevices={[AdMobBanner.simulatorId]}
+        onAdFailedToLoad={error => console.error(error)}
+      />
       <StatusBar barStyle="light-content" />
       <SafeAreaView style={ styles.content }>
         <BarSearch/>
@@ -81,6 +91,15 @@ export const AppGif = () =>{
                   color="#9426f7"
                   animating
                 />
+              <Text 
+                style={{
+                  color: '#eee',
+                  marginTop: 10,
+                  fontWeight: 'bold',
+                  fontSize: 15
+                }}>
+                Loading...
+              </Text>
             </View>
           
 

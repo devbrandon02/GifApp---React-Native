@@ -3,12 +3,11 @@
 import React, { useContext, useState } from 'react'
 import { Text, View, StyleSheet, Image, TouchableOpacity, PermissionsAndroid, Modal, Alert} from 'react-native'
 import { SearchContext } from '../context/searchContext'
-import { saveGifs } from '../helpers/saveGifs'
+import { saveGifs, saveStickers } from '../helpers/saveGifs'
 
 
-export const GifsCard = ({search, gifData}) => {
+export const GifsCard = ({gifData}) => {
   
-  const [showModal, setshowModal] = useState(true)
   const [MessageSuccess, setMessageSuccess] = useState(false)
   const { search: searchContext } = useContext(SearchContext)
 
@@ -22,18 +21,35 @@ export const GifsCard = ({search, gifData}) => {
     if(permisionResponse === PermissionsAndroid.RESULTS.GRANTED && category === 'gifs' ){
       saveGifs(dataUrl, slug)
         .then((res) => {
+          Alert.alert(
+            'Estado de tu descarga!',
+            'Descarga de tu Gif Exitosa :)',
+            [{
+              style: 'default',
+              text: 'Entendido'
+            }]
+          )
           setMessageSuccess(true)
-          Alert.alert('Tu Gifs Se ah descargado correctamente :)')
         })
         .catch((err)=> {
-          Alert.alert('Ah ocurrido un error con tu descarga :(')
+          Alert.alert('Error con tu descarga :(')
         })
 
     } else{
-      console.log('NO LO PUEDES USAR')
+      saveStickers(dataUrl, slug)
+      .then((res) => {
+        Alert.alert(
+          'Estado de tu descarga!',
+          'Descarga de tu Stickers Exitosa :)',
+          [{
+            style: 'default',
+            text: 'Entendido'
+          }]
+        )
+        setMessageSuccess(true)
+      })
     }
-  } 
-
+  }
   return (
     <>
       <View>

@@ -1,11 +1,14 @@
 /* eslint-disable */
+
 import React from 'react'
 import RNFetchBlob from 'react-native-fetch-blob'
+import 'convertapi-js'
 
-export const saveGifs = async(gifUrl, slug) => {
-  let directorys = RNFetchBlob.fs.dirs
-  let date = new Date()
-  let ext = '.gif' 
+
+export const saveGifs = async (gifUrl, slug) => {
+  let directorys = RNFetchBlob.fs.dirs;
+  let date = new Date();
+  let ext = '.gif'
 
   await RNFetchBlob.config({
     fileCache: true,
@@ -13,9 +16,9 @@ export const saveGifs = async(gifUrl, slug) => {
     addAndroidDownloads: {
       useDownloadManager: true,
       notification: true,
-      path: directorys.DCIMDir + '/GifApp/gifs/image-'+slug+ext,
-      description: 'GifApp'
-    }
+      path: directorys.DCIMDir + '/GifApp/gifs/image-' + slug + ext,
+      description: 'GifApp',
+    },
   })
   .fetch('GET', gifUrl)
   .then((res) => {
@@ -26,6 +29,36 @@ export const saveGifs = async(gifUrl, slug) => {
   
   .catch((err) => {
     return false
+  });
+  
+};
+
+
+export const saveStickers = async (stickerUrl, slug) => {
+  let directorys = RNFetchBlob.fs.dirs;
+  let date = new Date();
+  let ext = '.webp'
+
+  await RNFetchBlob.config({
+    fileCache: true,
+    appendExt: 'webp',
+    addAndroidDownloads: {
+      useDownloadManager: true,
+      notification: true,
+      path: directorys.DCIMDir + '/GifApp/stickers/' + slug + ext,
+      description: 'GifApp',
+    },
+  })
+  .fetch('get',stickerUrl)
+  .then((res) => {
+    console.log(res.path())
+
+    return true
   })
   
-}
+  .catch((err) => {
+    return false
+  });
+
+ 
+};

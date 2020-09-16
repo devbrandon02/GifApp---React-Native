@@ -17,7 +17,6 @@ export const BarSearch = () => {
 
   const [textSearch, settextSearch] = useState()
   const { search, dispatch } = useContext(SearchContext)
-  const [btnActive, setbtnActive] = useState(false)
 
 
   console.log(search)
@@ -82,7 +81,6 @@ export const BarSearch = () => {
 
         <View style={ style.typesContent }>
           <TouchableOpacity
-            tvParallaxProperties
             onPress={ handleSearchGifs }
             style={ style.tagsType }>
             <Text style={ style.tagsText }>
@@ -91,7 +89,6 @@ export const BarSearch = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            tvParallaxProperties
             onPress={ handleSearchStickers }
             style={ style.tagsType }>
             <Text style={ style.tagsText }>
