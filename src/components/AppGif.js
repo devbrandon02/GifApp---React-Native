@@ -10,22 +10,21 @@ import {
   Text,
   StatusBar,
   FlatList,
-  View,
-  ActivityIndicator,
+  View
 } from 'react-native';
 import { AdMobBanner } from 'react-native-admob'
 import { BarSearch } from './BarSearch';
-import { searchReducer } from '../reducers/searchReducer';
 import { SearchContext } from '../context/searchContext';
 import { GifsCard } from './GifsCard';
+import { Loading } from './Loading';
+
 
 const API = 'dwQacYa21OI16ljYleVkrKyTQ43HIhiY'
 
 
-export const AppGif = () =>{
+export const AppGif = ({navigation}) =>{
   const { search: searchText } = useContext(SearchContext)
-  const [gifData, setgifData] = useState()
-
+  const [gifData, setgifData] = useState([])
   const {category, typeSearch, search} = searchText
 
 
@@ -49,60 +48,34 @@ export const AppGif = () =>{
   }, [category, search])
 
 
-  useEffect(() => {
-    setgifData()
-    
-    if(typeSearch === 'trending'){
-      fetch(`https://api.giphy.com/v1/${category}/${typeSearch}`,{
-        method: 'GET',
-        headers:{
-          api_key: API,
-          'Content-Type': 'application/json',
-        }
-      })
-      .then(res => res.json())
-      .then(({ data }) => {
-        setgifData(data)
-      })
-      .catch((err) => console.log(err))
-    }
-  },[searchText])
-  
-  console.log(searchText)
-  console.log(gifData)
-
-
   return (
     <>
+      <StatusBar barStyle="light-content"/>
+
       <AdMobBanner
         adSize="fullBanner"
         adUnitID="ca-app-pub-7987300867740926/5722986468"
         testDevices={[AdMobBanner.simulatorId]}
         onAdFailedToLoad={error => console.error(error)}
       />
-      <StatusBar barStyle="light-content" />
+
       <SafeAreaView style={ styles.content }>
-        <BarSearch/>
+        <BarSearch 
+          navigation={navigation}
+        />
+
+        { 
+          gifData === undefined || gifData.length <= 0
+          ? <View style={ styles.noResult }>
+              <Text style={ styles.textNoResult }>No hay Resultados</Text>
+            </View>
+          : <Text></Text>
+        } 
+
 
         { !gifData 
-          ? <View style={ styles.loadingView}>
-                <ActivityIndicator
-                  size="large"
-                  color="#9426f7"
-                  animating
-                />
-              <Text 
-                style={{
-                  color: '#eee',
-                  marginTop: 10,
-                  fontWeight: 'bold',
-                  fontSize: 15
-                }}>
-                Loading...
-              </Text>
-            </View>
+          ? <Loading/>
           
-
           : <FlatList
               initialNumToRender="20"
               progressViewOffset
@@ -127,10 +100,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#303030',
     height: '100%'
   },
-  loadingView:{
-    alignItems: 'center',
+  noResult:{
+    backgroundColor: '#DE4034',
+    height: 60,
+    marginTop: 5,
     justifyContent: 'center',
-    height: '55%'
+    alignItems: 'center',
   },
+  textNoResult:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#9F1409'
+  }
 })
 

@@ -3,24 +3,41 @@
 import React, { useContext, useState } from 'react'
 import { Text, View, StyleSheet, Image, TouchableOpacity, PermissionsAndroid, Modal, Alert} from 'react-native'
 import { SearchContext } from '../context/searchContext'
-import { saveGifs, saveStickers } from '../helpers/saveGifs'
+import { saveGifs, saveStickers } from '../helpers/saveImages'
 
 
 export const GifsCard = ({gifData}) => {
   
   const [MessageSuccess, setMessageSuccess] = useState(false)
   const { search: searchContext } = useContext(SearchContext)
-
   const { category } = searchContext
 
 
-  const saveGifsAndStckers = async (dataUrl, slug) => {
+  const saveImageConfirmed = async (dataUrl, slug) => {
     const permisionResponse = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE) 
 
+    Alert.alert(
+      'Confirmacion de la descarga',
+      '¿Estas SEGURO que desea descargar la Imagen?',
+        [{
+          style: 'default',
+          text: 'Cancelar',
+        },{
+          style: 'default',
+          text: 'SI, Estoy seguro', 
+          onPress: (() => 
+            saveGifsOrStickers(permisionResponse, dataUrl, slug)
+          )
+        }]
+    )
+  }
+
+
+  const saveGifsOrStickers = (permisionResponse, url, slug) => {
     if(permisionResponse === PermissionsAndroid.RESULTS.GRANTED && category === 'gifs' ){
-      saveGifs(dataUrl, slug)
-        .then((res) => {
+      saveGifs(url, slug)
+        .then(() => {
           Alert.alert(
             'Estado de tu descarga!',
             'Descarga de tu Gif Exitosa :)',
@@ -31,14 +48,14 @@ export const GifsCard = ({gifData}) => {
           )
           setMessageSuccess(true)
         })
-        .catch((err)=> {
-          Alert.alert('Error con tu descarga :(')
+        .catch(async()=> {
+          await Alert.alert('Error con tu descarga :(')
         })
 
     } else{
-      saveStickers(dataUrl, slug)
-      .then((res) => {
-        Alert.alert(
+      saveStickers(url, slug)
+      .then(async() => {
+        await Alert.alert(
           'Estado de tu descarga!',
           'Descarga de tu Stickers Exitosa :)',
           [{
@@ -50,6 +67,8 @@ export const GifsCard = ({gifData}) => {
       })
     }
   }
+
+
   return (
     <>
       <View>
@@ -64,7 +83,9 @@ export const GifsCard = ({gifData}) => {
             />
             <TouchableOpacity
               onPress={() => 
-                saveGifsAndStckers(gifData.images.downsized_medium.url, gifData.slug)
+                saveImageConfirmed(
+                  gifData.images.downsized_medium.url, gifData.slug
+                )
               } 
               style={ styles.btnDownloaded }>
               <Text style={ styles.textBtn }>

@@ -6,16 +6,14 @@ View,
 Text,
 TextInput,
 StyleSheet,
-TouchableHighlight,
 TouchableOpacity,
 Alert
 } from 'react-native'
-import { searchReducer } from '../reducers/searchReducer'
 import { SearchContext } from '../context/searchContext'
 
-export const BarSearch = () => {
+export const BarSearch = ({navigation}) => {
 
-  const [textSearch, settextSearch] = useState()
+  const [textSearch, settextSearch] = useState('')
   const { search, dispatch } = useContext(SearchContext)
 
 
@@ -26,9 +24,10 @@ export const BarSearch = () => {
   }
 
   const handleSearch = () => {
-    if(textSearch === ""){
+    if(textSearch === ''){
+      settextSearch('Trending')
       dispatch({
-        type: 'resetTrending',
+        type: 'resetSearch',
         category: search.category
       })
 
@@ -42,25 +41,28 @@ export const BarSearch = () => {
       }
     }
 
-    const handleSearchGifs = () => {
-      dispatch({
-        type: 'stickers',
-        payload: textSearch,
-        typeSearch: search.typeSearch,
-        category: 'gifs'
-      })
-      
-    }
+  const handleSearchGifs = () => {
+    dispatch({
+      type: 'stickers',
+      payload: textSearch,
+      typeSearch: search.typeSearch,
+      category: 'gifs'
+    })
+    
+  }
 
-    const handleSearchStickers = () => {
+  const handleSearchStickers = () => {
+    dispatch({
+      type: 'stickers',
+      payload: search.search,
+      category: 'stickers',
+      typeSearch: search.typeSearch,
+    })
+  }
 
-      dispatch({
-        type: 'stickers',
-        payload: textSearch,
-        category: 'stickers',
-        typeSearch: search.typeSearch,
-      })
-    }
+  const handleSearchMemes = () => {
+    navigation.navigate('memesScreen')
+  }
 
    
   return (
@@ -95,6 +97,15 @@ export const BarSearch = () => {
               Stickers
             </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={ handleSearchMemes }
+            style={ style.tagsType }>
+            <Text style={ style.tagsText }>
+              Plantillas de Memes
+            </Text>
+          </TouchableOpacity>
+
         </View>
       </View>
     </>

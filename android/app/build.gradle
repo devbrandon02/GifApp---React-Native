@@ -134,6 +134,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+
     }
     splits {
         abi {
@@ -154,6 +156,8 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            resValue "string", "CodePushDeploymentKey", '""'
+
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -161,6 +165,8 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            resValue "string", "CodePushDeploymentKey", '"a9wEi8zQRSZdpuSmSQD0r1DOiR71j1kJpaw6P"'
+
         }
     }
 
@@ -187,7 +193,7 @@ dependencies {
 
     implementation 'com.facebook.fresco:fresco:2.3.0'
     implementation 'com.google.android.gms:play-services-ads:19.3.0'
-
+    implementation 'com.android.support:multidex:1.0.3'  //with support libraries
     // For animated GIF support
     implementation 'com.facebook.fresco:animated-gif:2.3.0'
 

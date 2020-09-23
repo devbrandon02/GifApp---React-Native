@@ -2,7 +2,6 @@
 
 import React from 'react'
 import RNFetchBlob from 'react-native-fetch-blob'
-import 'convertapi-js'
 
 
 export const saveGifs = async (gifUrl, slug) => {
@@ -37,11 +36,11 @@ export const saveGifs = async (gifUrl, slug) => {
 export const saveStickers = async (stickerUrl, slug) => {
   let directorys = RNFetchBlob.fs.dirs;
   let date = new Date();
-  let ext = '.webp'
+  let ext = '.gif'
 
   await RNFetchBlob.config({
     fileCache: true,
-    appendExt: 'webp',
+    appendExt: 'gif',
     addAndroidDownloads: {
       useDownloadManager: true,
       notification: true,
@@ -56,7 +55,7 @@ export const saveStickers = async (stickerUrl, slug) => {
     return true
   })
   
-  .catch((err) => {
+  .catch(() => {
     return false
   });
 

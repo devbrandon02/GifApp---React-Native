@@ -17,10 +17,16 @@ export const searchReducer = (state={}, action) => {
         category: action.category,
         typeSearch: action.typeSearch,
       }
+
+    case 'memes':
+    return{
+      typeSearch: action.typeSearch,
+    }
       
-    case 'resetTrending':
+    case 'resetSearch':
       return{
-        typeSearch: 'trending',
+        typeSearch: 'search',
+        search: 'trending',
         category: action.category
       }
 
